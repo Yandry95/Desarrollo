@@ -1,0 +1,46 @@
+
+a[highlight]{
+    font-weight:bold;
+    text-align:center
+}
+
+/******** MainLayout *********/
+.header{
+    padding: 0 var(--lumo-space-m);
+    background-color: var(--lumo-primary-color);
+}
+.draw{
+     color: #FFFFFF;
+}
+.header h1.logo{
+    font-size:1em;
+    margin:var(--lumo-space-m);
+    color: #FFFFFF;
+}
+.pizarra{
+background-color: hsla(214, 57%, 24%, 0.1);
+height:100%;
+}
+.logo-drawer{
+    width: 60px;
+    height: 60px;
+}
+.menubar{
+background: transparent;
+}
+.escudo{
+height:30px;
+}
+
+.icono{
+width:15px;
+}
+
+/******** Historial_Medico *********/
+.panel-historial{
+    border: 2px solid hsla(214, 57%, 24%, 0.1);
+    padding: 10px;
+}
+.panel-historial:hover{
+    border: 2px solid var(--lumo-primary-color);
+}
