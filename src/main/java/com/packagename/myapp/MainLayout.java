@@ -50,7 +50,7 @@ public class MainLayout extends AppLayout {
     private void buildDrawer() {
         VerticalLayout pizarra = new VerticalLayout();
 
-        Image image = new Image("/img/usuario.png","Image");
+        Image image = new Image("/img/user.jpg","Image");
         image.addClassName("logo-drawer");
 
         RouterLink inscripcionlink = new RouterLink("Inscripción", Inscripcion.class);

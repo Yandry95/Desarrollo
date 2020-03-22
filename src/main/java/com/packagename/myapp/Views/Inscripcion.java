@@ -19,6 +19,11 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
+import org.vaadin.textfieldformatter.CustomStringBlockFormatter;
+import org.vaadin.textfieldformatter.phone.PhoneI18nFieldFormatter;
+
+import java.time.LocalDate;
+import java.time.Period;
 
 @Route(value = "inscripcion", layout = MainLayout.class)
 @PageTitle("UE JUNAME | INSCRIPCIÓN")
@@ -32,12 +37,25 @@ public class Inscripcion extends HorizontalLayout {
     public Inscripcion() {
         setSizeFull();
         setMargin(true);
-        grid.setColumnReorderingAllowed(true);
-        grid.getColumns().forEach(col-> col.setAutoWidth(true));
         grid.setWidth("90%");
         grid.setHeight("100%");
-        grid.setItems(PersonasController.findAll());
+        grid.removeAllColumns();
+        grid.addColumn(Personas::getNombre).setHeader("Nombre");
+        grid.addColumn(Personas::getApellido).setHeader("Apellido");
+        grid.addColumn(Personas::getCorreo).setHeader("Correo");
+        grid.addColumn(Personas::getTelefono).setHeader("Teléfono");
+        grid.addColumn( e ->(
+                Period.between(e.getFecha_nacimiento(),LocalDate.now()).getYears()
+        )).setHeader("Edad");
+        grid.addColumn(Personas::getSexo).setHeader("Sexo");
+        grid.setColumnReorderingAllowed(true);
+        grid.getColumns().forEach(col-> {col.setAutoWidth(true); col.setSortable(true);});
+        Actualizar();
         add(buildForm(),grid);
+    }
+
+    private void Actualizar() {
+        grid.setItems(PersonasController.findAll());
     }
 
     private Component buildForm() {
@@ -58,6 +76,9 @@ public class Inscripcion extends HorizontalLayout {
         TextField telefono = new TextField("Teléfono:");
         telefono.setPrefixComponent(new Icon(VaadinIcon.PHONE));
         telefono.setWidthFull();
+        CustomStringBlockFormatter.Options options = new CustomStringBlockFormatter.Options();
+        options.setBlocks(3,3,4);
+        new CustomStringBlockFormatter(options).extend(telefono);
         RadioButtonGroup<String> horizontal = new RadioButtonGroup<>();
         horizontal.setLabel("Sexo");
         horizontal.setItems("Masculino", "Femenino");
@@ -67,9 +88,9 @@ public class Inscripcion extends HorizontalLayout {
         guardar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         guardar.setWidthFull();
 
-        guardar.addClickListener(e->{PersonasController.save(new Personas(1L, name.getValue(), apellido.getValue(), email.getValue(),
+        guardar.addClickListener(e->{PersonasController.save(new Personas(name.getValue(), apellido.getValue(), email.getValue(),
                 fecha_nacimiento.getValue(), telefono.getValue(),horizontal.getValue()));
-            grid.setItems(PersonasController.findAll());
+            Actualizar();
         });
         form.addClassName("centered-content");
         form.add(name, apellido, email, fecha_nacimiento, telefono, horizontal, guardar);

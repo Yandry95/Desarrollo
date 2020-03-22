@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Table(name = "TBL_PERSONAS")
 public class Personas implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idPersona;
 
     @Column(name = "NOMBRE")
@@ -30,9 +31,8 @@ public class Personas implements Serializable {
     private String sexo;
 
     public Personas(){ }
-    public Personas(Long idPersona,String nombre, String apellido, String correo, LocalDate fecha_nacimiento, String telefono, String sexo) {
+    public Personas(String nombre, String apellido, String correo, LocalDate fecha_nacimiento, String telefono, String sexo) {
         super();
-        this.idPersona = idPersona;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
