@@ -45,3 +45,19 @@ width:15px;
 .panel-historial:hover{
     border: 2px solid var(--lumo-primary-color);
 }
+/******** LoginView *********/
+.login{
+width: 600px;
+height: 400px;
+border: 1.5px solid hsla(214, 57%, 24%, 0.1);
+border-radius: 7px;
+margin: auto;
+}
+.login-logo{
+height: 110px;
+}
+.login-portada{
+background-image: url("img/fondo.jpg");
+background-repeat: no-repeat;
+background-size: contain;
+}
