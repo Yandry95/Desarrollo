@@ -55,10 +55,14 @@ margin: auto;
 transform: translate(-0%,+40%);
 }
 .login-logo{
-height: 110px;
+height: 90px;
+}
+
+.login-form-letra{
+text-align: left;
 }
 .login-portada{
-background-image: url("img/fondo.jpg");
+background-image: url("img/fondo2.jpg");
 background-repeat: no-repeat;
 background-size: cover;
 border-top-left-radius: 7px;
@@ -66,4 +70,6 @@ border-bottom-left-radius: 7px;
 }
 .login-portada-letra{
 color: #fff;
+text-align:center;
+margin: 10px 5px;
 }

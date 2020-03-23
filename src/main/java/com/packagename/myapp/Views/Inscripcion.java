@@ -40,6 +40,7 @@ public class Inscripcion extends HorizontalLayout {
         grid.setWidth("90%");
         grid.setHeight("100%");
         grid.removeAllColumns();
+        grid.addColumn(Personas::getCedula).setHeader("Cédula");
         grid.addColumn(Personas::getNombre).setHeader("Nombre");
         grid.addColumn(Personas::getApellido).setHeader("Apellido");
         grid.addColumn(Personas::getCorreo).setHeader("Correo");
@@ -62,18 +63,32 @@ public class Inscripcion extends HorizontalLayout {
         VerticalLayout form = new VerticalLayout();
         form.setSizeUndefined();
         form.setMargin(false);
-        TextField name = new TextField("Nombre:");
+        TextField cedula = new TextField();
+        cedula.setPlaceholder("Cédula...");
+        cedula.setPrefixComponent(new Icon(VaadinIcon.USER_CARD));
+        cedula.setWidthFull();
+        CustomStringBlockFormatter.Options options2 = new CustomStringBlockFormatter.Options();
+        options2.setBlocks(3, 3, 3, 1);
+        options2.setDelimiters(" ", " ", "-");
+        options2.setNumericOnly(true);
+        new CustomStringBlockFormatter(options2).extend(cedula);
+        TextField name = new TextField();
+        name.setPlaceholder("Nombre...");
         name.setPrefixComponent(new Icon(VaadinIcon.USER));
         name.setWidthFull();
-        TextField apellido = new TextField("Apellido:");
+        TextField apellido = new TextField();
+        apellido.setPlaceholder("Apellido...");
         apellido.setPrefixComponent(new Icon(VaadinIcon.USER));
         apellido.setWidthFull();
-        EmailField email = new EmailField("Correo:");
+        EmailField email = new EmailField();
+        email.setPlaceholder("Correo...");
         email.setPrefixComponent(new Icon(VaadinIcon.AT));
         email.setWidthFull();
-        DatePicker fecha_nacimiento = new DatePicker("Fecha de Nacimiento:");
+        DatePicker fecha_nacimiento = new DatePicker();
+        fecha_nacimiento.setPlaceholder("Fecha_nacimiento...");
         fecha_nacimiento.setWidthFull();
-        TextField telefono = new TextField("Teléfono:");
+        TextField telefono = new TextField();
+        telefono.setPlaceholder("Teléfono...");
         telefono.setPrefixComponent(new Icon(VaadinIcon.PHONE));
         telefono.setWidthFull();
         CustomStringBlockFormatter.Options options = new CustomStringBlockFormatter.Options();
@@ -88,12 +103,12 @@ public class Inscripcion extends HorizontalLayout {
         guardar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         guardar.setWidthFull();
 
-        guardar.addClickListener(e->{PersonasController.save(new Personas(name.getValue(), apellido.getValue(), email.getValue(),
+        guardar.addClickListener(e->{PersonasController.save(new Personas(cedula.getValue(), name.getValue(), apellido.getValue(), email.getValue(),
                 fecha_nacimiento.getValue(), telefono.getValue(),horizontal.getValue()));
             Actualizar();
         });
         form.addClassName("centered-content");
-        form.add(name, apellido, email, fecha_nacimiento, telefono, horizontal, guardar);
+        form.add(cedula, name, apellido, email, fecha_nacimiento, telefono, horizontal, guardar);
         return form;
     }
 
