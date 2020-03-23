@@ -16,6 +16,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 
 import javax.sound.sampled.Port;
+import java.time.LocalDate;
 
 
 @Route("login")
@@ -33,13 +34,16 @@ public class LoginView extends HorizontalLayout {
 
     private Component buildFormLogin() {
         VerticalLayout FormLogin = new VerticalLayout();
-        H2 title = new H2("LOGIN");
-        H3 nombre = new H3("USUARIO");
+        H2 title = new H2("Iniciar Sesión");
+        H3 nombre = new H3("Bienvenido USUARIO");
         TextField usuario = new TextField("Ingrese su nombre de usuario:");
+        usuario.setPlaceholder("Nombre de usuario");
         usuario.setWidthFull();
         usuario.setPrefixComponent(new Icon(VaadinIcon.USER));
         PasswordField clave = new PasswordField("Ingrese su contraseña:");
+        clave.setPlaceholder("Contraseña");
         clave.setWidthFull();
+        clave.setPrefixComponent(new Icon(VaadinIcon.LOCK));
         Button next = new Button("Siguiente");
         next.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         next.setIcon(new Icon(VaadinIcon.ARROW_CIRCLE_RIGHT));
@@ -64,7 +68,10 @@ public class LoginView extends HorizontalLayout {
         Image logo = new Image("img/escudo.png","escudo");
         logo.addClassName("login-logo");
         H2 title = new H2("UE JUNAME");
-        H4 title2 = new H4("Derechos Reservados");
+        title.addClassName("login-portada-letra");
+        H4 title2 = new H4("Sistema de gestión académico y administrativo" +
+                "Derechos reservados Unidad Educativa Julia Navarrete Mendoza " + LocalDate.now().getYear());
+        title2.addClassName("login-portada-letra");
         Portada.add(logo, title, title2);
         Portada.setJustifyContentMode(JustifyContentMode.CENTER);
         return Portada;
