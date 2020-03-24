@@ -30,11 +30,25 @@ public class Personas implements Serializable {
     @Column(name = "TELEFONO")
     private String telefono;
 
+    @Column(name = "DIRECCION")
+    private String direccion;
+
     @Column(name = "SEXO")
     private String sexo;
 
+    @Column(name = "NOMBRE_USUARIO")
+    private String nombre_usuario;
+
+    @Column(name = "CLAVE")
+    private String clave;
+
+    @Lob
+    @Column(name="IMAGEN", columnDefinition="longblob")
+    private byte[] imagen;
+
     public Personas(){ }
-    public Personas(String cedula, String nombre, String apellido, String correo, LocalDate fecha_nacimiento, String telefono, String sexo) {
+    public Personas(String cedula, String nombre, String apellido, String correo, LocalDate fecha_nacimiento,
+                    String telefono, String direccion, String sexo, String nombre_usuario, String clave) {
         super();
         this.cedula = cedula;
         this.nombre = nombre;
@@ -42,7 +56,10 @@ public class Personas implements Serializable {
         this.correo = correo;
         this.fecha_nacimiento = fecha_nacimiento;
         this.telefono = telefono;
+        this.direccion = direccion;
         this.sexo = sexo;
+        this.nombre_usuario = nombre_usuario;
+        this.clave = clave;
     }
 
     public String getCedula() {
@@ -93,12 +110,44 @@ public class Personas implements Serializable {
         this.telefono = telefono;
     }
 
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
     public String getSexo() {
         return sexo;
     }
 
     public void setSexo(String sexo) {
         this.sexo = sexo;
+    }
+
+    public String getNombre_usuario() {
+        return nombre_usuario;
+    }
+
+    public void setNombre_usuario(String nombre_usuario) {
+        this.nombre_usuario = nombre_usuario;
+    }
+
+    public String getClave() {
+        return clave;
+    }
+
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
+
+    public byte[] getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
     }
 
     public long getIdPersona() {

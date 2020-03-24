@@ -24,6 +24,7 @@ import org.vaadin.textfieldformatter.phone.PhoneI18nFieldFormatter;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.StringTokenizer;
 
 @Route(value = "inscripcion", layout = MainLayout.class)
 @PageTitle("UE JUNAME | INSCRIPCIÓN")
@@ -45,6 +46,7 @@ public class Inscripcion extends HorizontalLayout {
         grid.addColumn(Personas::getApellido).setHeader("Apellido");
         grid.addColumn(Personas::getCorreo).setHeader("Correo");
         grid.addColumn(Personas::getTelefono).setHeader("Teléfono");
+        grid.addColumn(Personas::getDireccion).setHeader("Dirección");
         grid.addColumn( e ->(
                 Period.between(e.getFecha_nacimiento(),LocalDate.now()).getYears()
         )).setHeader("Edad");
@@ -94,6 +96,10 @@ public class Inscripcion extends HorizontalLayout {
         CustomStringBlockFormatter.Options options = new CustomStringBlockFormatter.Options();
         options.setBlocks(3,3,4);
         new CustomStringBlockFormatter(options).extend(telefono);
+        TextField direccion = new TextField();
+        direccion.setPlaceholder("Dirección...");
+        direccion.setPrefixComponent(new Icon(VaadinIcon.HOME_O));
+        direccion.setWidthFull();
         RadioButtonGroup<String> horizontal = new RadioButtonGroup<>();
         horizontal.setLabel("Sexo");
         horizontal.setItems("Masculino", "Femenino");
@@ -103,12 +109,17 @@ public class Inscripcion extends HorizontalLayout {
         guardar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         guardar.setWidthFull();
 
-        guardar.addClickListener(e->{PersonasController.save(new Personas(cedula.getValue(), name.getValue(), apellido.getValue(), email.getValue(),
-                fecha_nacimiento.getValue(), telefono.getValue(),horizontal.getValue()));
+        guardar.addClickListener(e->{
+            String clave = cedula.getValue().replace(" ", "");
+            clave = clave.replace("-", "");
+            String nombre_usuario = name.getValue().toLowerCase().charAt(0)+ apellido.getValue().toLowerCase()+
+                    clave.substring(6,10);
+            PersonasController.save(new Personas(cedula.getValue(), name.getValue(), apellido.getValue(), email.getValue(),
+                fecha_nacimiento.getValue(), telefono.getValue(), direccion.getValue(), horizontal.getValue(), nombre_usuario, clave));
             Actualizar();
         });
         form.addClassName("centered-content");
-        form.add(cedula, name, apellido, email, fecha_nacimiento, telefono, horizontal, guardar);
+        form.add(cedula, name, apellido, email, fecha_nacimiento, telefono, direccion, horizontal, guardar);
         return form;
     }
 

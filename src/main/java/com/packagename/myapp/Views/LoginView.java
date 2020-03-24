@@ -1,23 +1,35 @@
 package com.packagename.myapp.Views;
 
+import com.packagename.myapp.Controllers.LoginController;
+import com.packagename.myapp.MainLayout;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.charts.model.Navigation;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
+import com.vaadin.flow.server.VaadinSession;
 
 import java.time.LocalDate;
 
 
 @Route("login")
 @PageTitle("AcademyTic")
-public class LoginView extends HorizontalLayout {
+public class LoginView extends HorizontalLayout implements AfterNavigationObserver, BeforeEnterObserver{
+    public static String clave_usuario= null;
+    public static long contador = LoginController.contar_registros();
+    public static PasswordField clave;
+    public static H1 title;
+    public static H3 nombre;
+    public static Button next2;
     public LoginView(){
         setPadding(false);
         setSpacing(false);
@@ -30,9 +42,9 @@ public class LoginView extends HorizontalLayout {
 
     private Component buildFormLogin() {
         VerticalLayout FormLogin = new VerticalLayout();
-        H1 title = new H1("Iniciar Sesión");
+        title = new H1("Iniciar Sesión");
 
-        H3 nombre = new H3("Bienvenido USUARIO");
+        nombre = new H3();
         nombre.addClassName("login-form-letra");
 
         TextField usuario = new TextField("Ingrese su nombre de usuario:");
@@ -40,7 +52,7 @@ public class LoginView extends HorizontalLayout {
         usuario.setWidthFull();
         usuario.setPrefixComponent(new Icon(VaadinIcon.USER));
 
-        PasswordField clave = new PasswordField("Ingrese su contraseña:");
+        clave = new PasswordField("Ingrese su contraseña:");
         clave.setPlaceholder("Contraseña...");
         clave.setWidthFull();
         clave.setPrefixComponent(new Icon(VaadinIcon.LOCK));
@@ -50,7 +62,7 @@ public class LoginView extends HorizontalLayout {
         next.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         next.setIcon(new Icon(VaadinIcon.ARROW_CIRCLE_RIGHT));
 
-        Button next2 = new Button("Siguiente");
+        next2 = new Button("Siguiente");
         next2.setWidthFull();
         next2.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         next2.setIcon(new Icon(VaadinIcon.ARROW_CIRCLE_RIGHT));
@@ -58,11 +70,57 @@ public class LoginView extends HorizontalLayout {
         FormLogin.add(title,usuario,next);
         FormLogin.setAlignItems(Alignment.CENTER);
 
-        next.addClickListener(e->{
-            FormLogin.removeAll();
-            FormLogin.add(title, nombre, clave, next2 );
+        next.addClickListener(e-> {
+            if (contador==0){
+                VaadinSession.getCurrent().setAttribute("NOMBRE_PERSONA", "Usuario");
+                if(usuario.getValue().equals("admin"))
+                    continuarLogin(FormLogin);
+                else
+                    mensajeError("El nombre de usuario ingresado es incorrecto");
+            }
+            else {
+                clave_usuario = LoginController.login(usuario.getValue());
+                if (clave_usuario != null)
+                    continuarLogin(FormLogin);
+                else
+                    mensajeError("El nombre de usuario ingresado es incorrecto");
+            }
         });
+
+        next2.addClickListener(e->{
+            if(contador==0){
+                if(clave.getValue().equals("admin"))
+                    ingresar();
+                else
+                    mensajeError("La contraseña ingresada es incorrecta");
+            }
+            else{
+                if(clave.getValue().equals(clave_usuario))
+                    ingresar();
+                else
+                    mensajeError("La contraseña ingresada es incorrecta");
+            }
+        });
+
         return FormLogin;
+    }
+
+    private void ingresar() {
+        VaadinSession.getCurrent().setAttribute("LOGIN", "YANDRY");
+        getUI().ifPresent(e-> e.navigate(""));
+    }
+
+    private void mensajeError(String mensaje) {
+        Notification notification = new Notification(
+                mensaje, 3000,
+                Notification.Position.TOP_START);
+                notification.open();
+    }
+
+    private void continuarLogin(VerticalLayout component) {
+        component.removeAll();
+        nombre.setText("Bienvenido "+VaadinSession.getCurrent().getAttribute("NOMBRE_PERSONA"));
+        component.add(title, nombre, clave, next2 );
     }
 
     private Component buildPortada() {
@@ -90,5 +148,16 @@ public class LoginView extends HorizontalLayout {
         return Portada;
     }
 
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
+        if (VaadinSession.getCurrent().getAttribute("LOGIN")!=null) {
+            beforeEnterEvent.forwardTo(MainLayout.class);
+        }
+    }
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent afterNavigationEvent) {
+
+    }
 
 }
