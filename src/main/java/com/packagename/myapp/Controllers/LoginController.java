@@ -10,7 +10,7 @@ public class LoginController {
     public static Personas u;
     public static Query query;
     public static long contador = 0;
-    public static String clave = null;
+    public static String clave;
 
     public static long contar_registros(){
         JPAService.runInTransaction(em -> {
@@ -22,6 +22,7 @@ public class LoginController {
     }
 
     public static String login(String usuario) {
+        clave = null;
         JPAService.runInTransaction(re -> {
             query = re.createQuery("SELECT u from Personas u where u.nombre_usuario = ?1");
             query.setParameter(1, usuario);

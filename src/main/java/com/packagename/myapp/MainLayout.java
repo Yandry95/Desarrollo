@@ -34,7 +34,7 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
 
     Tabs tabs;
     MenuItem salir;
-    String nombreUsuario = VaadinSession.getCurrent().getAttribute("NOMBRE_PERSONA").toString();
+    String nombreUsuario;
 
     public MainLayout() {
         buildHead();
@@ -85,6 +85,8 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
     }
 
     private Component buildUserMenu() {
+        nombreUsuario = (VaadinSession.getCurrent().getAttribute("NOMBRE_PERSONA")==null) ? "USUARIO" :
+                VaadinSession.getCurrent().getAttribute("NOMBRE_PERSONA").toString();
         final MenuBar settings = new MenuBar();
         settings.addThemeVariants(MenuBarVariant.LUMO_SMALL, MenuBarVariant.LUMO_TERTIARY);
         MenuItem usuario = settings.addItem(nombreUsuario);
@@ -114,7 +116,6 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         if (VaadinSession.getCurrent().getAttribute("LOGIN")!=null) {
-            nombreUsuario = VaadinSession.getCurrent().getAttribute("NOMBRE_PERSONA").toString();
             salir.addClickListener(e->{
                 UI.getCurrent().getPage().setLocation(
                         "login");

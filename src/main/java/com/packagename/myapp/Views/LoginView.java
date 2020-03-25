@@ -72,7 +72,7 @@ public class LoginView extends HorizontalLayout implements AfterNavigationObserv
 
         next.addClickListener(e-> {
             if (contador==0){
-                VaadinSession.getCurrent().setAttribute("NOMBRE_PERSONA", "Usuario");
+                VaadinSession.getCurrent().setAttribute("NOMBRE_PERSONA", "Administrador");
                 if(usuario.getValue().equals("admin"))
                     continuarLogin(FormLogin);
                 else
