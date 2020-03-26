@@ -28,9 +28,9 @@ import java.util.StringTokenizer;
 
 @Route(value = "inscripcion", layout = MainLayout.class)
 @PageTitle("UE JUNAME | INSCRIPCIÓN")
-@PWA(name = "Vaadin Application",
-        shortName = "Vaadin App",
-        description = "This is an example Vaadin application.",
+@PWA(name = "AcademyTics",
+        shortName = "AcademyTics",
+        description = "Sistema de Gestión Académico y Administrativo UE JUNAME",
         enableInstallPrompt = true)
 @CssImport("./styles/shared-styles.css")
 public class Inscripcion extends HorizontalLayout {
@@ -98,7 +98,7 @@ public class Inscripcion extends HorizontalLayout {
         new CustomStringBlockFormatter(options).extend(telefono);
         TextField direccion = new TextField();
         direccion.setPlaceholder("Dirección...");
-        direccion.setPrefixComponent(new Icon(VaadinIcon.HOME_O));
+        direccion.setPrefixComponent(new Icon(VaadinIcon.HOME));
         direccion.setWidthFull();
         RadioButtonGroup<String> horizontal = new RadioButtonGroup<>();
         horizontal.setLabel("Sexo");
@@ -115,7 +115,7 @@ public class Inscripcion extends HorizontalLayout {
             String nombre_usuario = name.getValue().toLowerCase().charAt(0)+ apellido.getValue().toLowerCase()+
                     clave.substring(6,10);
             PersonasController.save(new Personas(cedula.getValue(), name.getValue(), apellido.getValue(), email.getValue(),
-                fecha_nacimiento.getValue(), telefono.getValue(), direccion.getValue(), horizontal.getValue(), nombre_usuario, clave));
+                fecha_nacimiento.getValue(), telefono.getValue(), direccion.getValue(), horizontal.getValue(), nombre_usuario, clave, null));
             Actualizar();
         });
         form.addClassName("centered-content");

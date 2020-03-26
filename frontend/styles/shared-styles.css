@@ -73,3 +73,22 @@ color: #fff;
 text-align:center;
 margin: 10px 5px;
 }
+
+@media (max-width:620px){
+.login{
+width: 90%;
+height: 90%;
+flex-direction: column;
+transform: translate(-0%,+5%);
+}
+.login-portada{
+height:40%;}
+.login-portada-letra{
+color: #043D6B;
+}
+}
+
+/************ Editar_Usuario **************/
+.edit-user-image{
+width: 100px;
+}

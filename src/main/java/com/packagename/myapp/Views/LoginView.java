@@ -13,6 +13,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
@@ -23,9 +24,10 @@ import java.time.LocalDate;
 
 @Route("login")
 @PageTitle("AcademyTic")
+@Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes, viewport-fit=cover")
 public class LoginView extends HorizontalLayout implements AfterNavigationObserver, BeforeEnterObserver{
     public static String clave_usuario= null;
-    public static long contador = LoginController.contar_registros();
+    public static long contador;
     public static PasswordField clave;
     public static H1 title;
     public static H3 nombre;
@@ -71,8 +73,10 @@ public class LoginView extends HorizontalLayout implements AfterNavigationObserv
         FormLogin.setAlignItems(Alignment.CENTER);
 
         next.addClickListener(e-> {
+            contador = LoginController.contar_registros();
             if (contador==0){
                 VaadinSession.getCurrent().setAttribute("NOMBRE_PERSONA", "Administrador");
+                VaadinSession.getCurrent().setAttribute("GENERO", "Masculino");
                 if(usuario.getValue().equals("admin"))
                     continuarLogin(FormLogin);
                 else
@@ -107,19 +111,21 @@ public class LoginView extends HorizontalLayout implements AfterNavigationObserv
 
     private void ingresar() {
         VaadinSession.getCurrent().setAttribute("LOGIN", "YANDRY");
-        getUI().ifPresent(e-> e.navigate(""));
+        getUI().ifPresent(e-> e.navigate("inscripcion"));
     }
 
     private void mensajeError(String mensaje) {
         Notification notification = new Notification(
                 mensaje, 3000,
-                Notification.Position.TOP_START);
+                Notification.Position.TOP_CENTER);
                 notification.open();
     }
 
     private void continuarLogin(VerticalLayout component) {
         component.removeAll();
-        nombre.setText("Bienvenido "+VaadinSession.getCurrent().getAttribute("NOMBRE_PERSONA"));
+        String genero = (VaadinSession.getCurrent().getAttribute("GENERO").toString().equals("Masculino")) ? "Bienvenido " :
+                "Bienvenida ";
+        nombre.setText(genero+VaadinSession.getCurrent().getAttribute("NOMBRE_PERSONA"));
         component.add(title, nombre, clave, next2 );
     }
 

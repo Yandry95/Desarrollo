@@ -1,8 +1,11 @@
 package com.packagename.myapp;
 
+import com.packagename.myapp.Controllers.PersonasController;
+import com.packagename.myapp.Models.Personas;
 import com.packagename.myapp.Views.Historial_Medico;
 import com.packagename.myapp.Views.Inscripcion;
 import com.packagename.myapp.Views.LoginView;
+import com.packagename.myapp.Views.Windows.Editar_Usuario;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -24,8 +27,10 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.*;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.VaadinSession;
 
+import java.io.ByteArrayInputStream;
 import java.util.Optional;
 
 @Route("")
@@ -35,8 +40,27 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
     Tabs tabs;
     MenuItem salir;
     String nombreUsuario;
+    Personas u;
+    Image image = new Image();
 
     public MainLayout() {
+        if(VaadinSession.getCurrent().getAttribute("ID_PERSONA")!=null){
+            u = PersonasController.findById((long)(VaadinSession.getCurrent().getAttribute("ID_PERSONA")));
+            nombreUsuario = u.getNombre() +" "+u.getApellido();
+            byte[] imageBytes = u.getImagen();
+            if(imageBytes != null) {
+                StreamResource resource = new StreamResource("Image", () -> {
+                    return new ByteArrayInputStream(imageBytes);
+                });
+                image.setSrc(resource);
+            }
+            else
+                image.setSrc("/img/user.jpg");
+        }
+        else{
+            image.setSrc("/img/user.jpg");
+            nombreUsuario = "Administrador";
+        }
         buildHead();
         buildDrawer();
     }
@@ -59,7 +83,6 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
     private void buildDrawer() {
         VerticalLayout pizarra = new VerticalLayout();
 
-        Image image = new Image("/img/user.jpg","Image");
         image.addClassName("logo-drawer");
 
         RouterLink inscripcionlink = new RouterLink("Inscripción", Inscripcion.class);
@@ -85,8 +108,6 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
     }
 
     private Component buildUserMenu() {
-        nombreUsuario = (VaadinSession.getCurrent().getAttribute("NOMBRE_PERSONA")==null) ? "USUARIO" :
-                VaadinSession.getCurrent().getAttribute("NOMBRE_PERSONA").toString();
         final MenuBar settings = new MenuBar();
         settings.addThemeVariants(MenuBarVariant.LUMO_SMALL, MenuBarVariant.LUMO_TERTIARY);
         MenuItem usuario = settings.addItem(nombreUsuario);
@@ -95,6 +116,18 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
         MenuItem preferencia = usuarioSubMenu.addItem("Preferencias");
         usuario.getSubMenu().add(new Hr());
         salir = usuarioSubMenu.addItem("Cerrar Sesión");
+        editar.addClickListener(e-> {
+            if (VaadinSession.getCurrent().getAttribute("ID_PERSONA")!=null) {
+                Editar_Usuario dialog = new Editar_Usuario();
+                dialog.open();
+            }
+        });
+        preferencia.addClickListener(e-> {
+            if (VaadinSession.getCurrent().getAttribute("ID_PERSONA")!=null){
+                Editar_Usuario dialog = new Editar_Usuario();
+                dialog.open();
+            }
+        });
         return settings;
     }
 

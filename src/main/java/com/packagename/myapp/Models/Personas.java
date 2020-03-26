@@ -48,7 +48,7 @@ public class Personas implements Serializable {
 
     public Personas(){ }
     public Personas(String cedula, String nombre, String apellido, String correo, LocalDate fecha_nacimiento,
-                    String telefono, String direccion, String sexo, String nombre_usuario, String clave) {
+                    String telefono, String direccion, String sexo, String nombre_usuario, String clave, byte[] imagen) {
         super();
         this.cedula = cedula;
         this.nombre = nombre;
@@ -60,6 +60,7 @@ public class Personas implements Serializable {
         this.sexo = sexo;
         this.nombre_usuario = nombre_usuario;
         this.clave = clave;
+        this.imagen = imagen;
     }
 
     public String getCedula() {

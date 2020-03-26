@@ -7,6 +7,9 @@ import javax.persistence.Query;
 import java.util.List;
 
 public class PersonasController{
+
+    public static Query query;
+    public static Personas u;
     public static void save(Personas persona){
         JPAService.runInTransaction(em ->{
             em.persist(persona);
@@ -24,6 +27,15 @@ public class PersonasController{
         return  JPAService.runInTransaction(em ->
                  em.createQuery("SELECT p from Personas p").getResultList()
         );
+    }
+    public static Personas findById(long id) {
+        JPAService.runInTransaction(em -> {
+            query = em.createQuery("SELECT p from Personas p where p.idPersona = ?1");
+            query.setParameter(1,id);
+            u = (Personas) query.getSingleResult();
+            return null;
+        });
+        return u;
     }
     static	Personas p;
     public static  Personas getMaxPersona() {
