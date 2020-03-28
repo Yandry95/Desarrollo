@@ -1,14 +1,10 @@
 package com.packagename.myapp.Views;
 
-import com.packagename.myapp.Controllers.PersonasController;
 import com.packagename.myapp.Models.Personas;
-import com.sun.deploy.security.SelectableSecurityManager;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
