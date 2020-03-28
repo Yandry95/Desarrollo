@@ -7,22 +7,27 @@ import java.util.function.Function;
 
 public class JPAService {
     private static EntityManagerFactory factory;
+
     static {
         init();
+
     }
     public static void init() {
         if (factory == null) {
             factory = Persistence.createEntityManagerFactory("appAcademyTic");
         }
     }
+
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
         factory.close();
     }
+
     public static EntityManagerFactory getFactory() {
         return factory;
     }
+
     public static <T> T runInTransaction(Function<EntityManager, T> function) {
         EntityManager entityManager = null;
         try {
@@ -39,4 +44,5 @@ public class JPAService {
             }
         }
     }
+
 }

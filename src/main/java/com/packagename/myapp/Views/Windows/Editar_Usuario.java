@@ -10,6 +10,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -46,7 +47,6 @@ public class Editar_Usuario extends Dialog {
         setWidth("600px");
 
         VerticalLayout contenido = new VerticalLayout();
-        contenido.setSizeFull();
         contenido.setSpacing(false);
         contenido.setMargin(false);
         contenido.setPadding(false);
@@ -83,22 +83,25 @@ public class Editar_Usuario extends Dialog {
         });
 
         contenido.add(tabs, components);
-        contenido.setFlexGrow(0,tabs);
-        contenido.setFlexGrow(50,components);
-        contenido.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
+        contenido.setAlignItems(FlexComponent.Alignment.STRETCH);
+        contenido.setHeightFull();
+        contenido.expand(components);
 
     }
 
     private Component buildEditUser() {
         Personas u = PersonasController.findById((long)(VaadinSession.getCurrent().getAttribute("ID_PERSONA")));
+
         HorizontalLayout EditUser = new HorizontalLayout();
         EditUser.setPadding(false);
         EditUser.setSizeFull();
 
         VerticalLayout profile = new VerticalLayout();
         profile.setWidth("35%");
+
         Button button = new Button("Actualizar foto");
         button.setIcon(new Icon(VaadinIcon.UPLOAD));
+
         Image image = new Image();
         if(u.getImagen()==null)
             image.setSrc("/img/user.jpg");
@@ -107,17 +110,18 @@ public class Editar_Usuario extends Dialog {
             image.setSrc(resource);
         }
         image.addClassName("edit-user-image");
+
         MemoryBuffer buffer = new MemoryBuffer();
         Upload upload = new Upload(buffer);
         upload.setMaxFiles(1);
         upload.setAcceptedFileTypes("image/jpeg", "image/png");
         upload.setUploadButton(button);
+        upload.setDropLabel(new Label("Arrastre una imagen aquí"));
         upload.addSucceededListener(event -> {
             StreamResource resource = new StreamResource("image", () -> buffer.getInputStream());
             image.setSrc(resource);
             copybuffer = buffer;
         });
-
 
         profile.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         profile.add(image, upload);
@@ -125,46 +129,47 @@ public class Editar_Usuario extends Dialog {
         VerticalLayout form = new VerticalLayout();
         form.setWidthFull();
         form.setMargin(false);
+
         TextField name = new TextField();
         name.setPlaceholder("Nombre...");
         name.setValue(u.getNombre());
         name.setPrefixComponent(new Icon(VaadinIcon.USER));
-        name.setWidthFull();
+
         TextField apellido = new TextField();
         apellido.setPlaceholder("Apellido...");
         apellido.setValue(u.getApellido());
         apellido.setPrefixComponent(new Icon(VaadinIcon.USER));
-        apellido.setWidthFull();
+
         EmailField email = new EmailField();
         email.setPlaceholder("Correo...");
         email.setValue(u.getCorreo());
         email.setPrefixComponent(new Icon(VaadinIcon.AT));
-        email.setWidthFull();
+
         DatePicker fecha_nacimiento = new DatePicker();
         fecha_nacimiento.setPlaceholder("Fecha_nacimiento...");
         fecha_nacimiento.setValue(u.getFecha_nacimiento());
-        fecha_nacimiento.setWidthFull();
+
         TextField telefono = new TextField();
         telefono.setPlaceholder("Teléfono...");
         telefono.setValue(u.getTelefono());
         telefono.setPrefixComponent(new Icon(VaadinIcon.PHONE));
-        telefono.setWidthFull();
         CustomStringBlockFormatter.Options options = new CustomStringBlockFormatter.Options();
         options.setBlocks(3,3,4);
         new CustomStringBlockFormatter(options).extend(telefono);
+
         TextField direccion = new TextField();
         direccion.setPlaceholder("Dirección...");
         direccion.setValue(u.getDireccion());
         direccion.setPrefixComponent(new Icon(VaadinIcon.HOME));
-        direccion.setWidthFull();
+
         RadioButtonGroup<String> horizontal = new RadioButtonGroup<>();
         horizontal.setLabel("Sexo");
         horizontal.setItems("Masculino", "Femenino");
         horizontal.setValue(u.getSexo());
+
         Button guardar = new Button("Guardar");
         guardar.setIcon(new Icon(VaadinIcon.ADD_DOCK));
         guardar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        guardar.setWidthFull();
 
         guardar.addClickListener(e->{
             u.setNombre(name.getValue());
@@ -192,6 +197,8 @@ public class Editar_Usuario extends Dialog {
         });
 
         form.add(name, apellido, email, fecha_nacimiento, telefono, direccion, horizontal, guardar);
+        form.setAlignItems(FlexComponent.Alignment.STRETCH);
+        form.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         EditUser.add(profile, form);
         return EditUser;
     }

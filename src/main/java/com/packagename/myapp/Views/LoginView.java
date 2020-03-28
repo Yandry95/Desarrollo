@@ -3,6 +3,7 @@ package com.packagename.myapp.Views;
 import com.packagename.myapp.Controllers.LoginController;
 import com.packagename.myapp.MainLayout;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -11,6 +12,7 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Viewport;
@@ -33,7 +35,6 @@ public class LoginView extends HorizontalLayout implements AfterNavigationObserv
     public static H3 nombre;
     public static Button next2;
     public LoginView(){
-        setPadding(false);
         setSpacing(false);
         addClassName("login");
         setDefaultVerticalComponentAlignment(Alignment.CENTER);
@@ -63,11 +64,13 @@ public class LoginView extends HorizontalLayout implements AfterNavigationObserv
         next.setWidthFull();
         next.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         next.setIcon(new Icon(VaadinIcon.ARROW_CIRCLE_RIGHT));
+        next.addClickShortcut(Key.ENTER);
 
         next2 = new Button("Siguiente");
         next2.setWidthFull();
         next2.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         next2.setIcon(new Icon(VaadinIcon.ARROW_CIRCLE_RIGHT));
+        next2.addClickShortcut(Key.ENTER);
 
         FormLogin.add(title,usuario,next);
         FormLogin.setAlignItems(Alignment.CENTER);

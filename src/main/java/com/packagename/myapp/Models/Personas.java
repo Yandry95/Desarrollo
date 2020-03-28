@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "TBL_PERSONAS")
 public class Personas implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idPersona;
@@ -47,6 +48,7 @@ public class Personas implements Serializable {
     private byte[] imagen;
 
     public Personas(){ }
+
     public Personas(String cedula, String nombre, String apellido, String correo, LocalDate fecha_nacimiento,
                     String telefono, String direccion, String sexo, String nombre_usuario, String clave, byte[] imagen) {
         super();
