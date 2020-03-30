@@ -33,7 +33,6 @@ import com.vaadin.flow.server.VaadinSession;
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
 
-@Route("")
 @CssImport("./styles/shared-styles.css")
 public class MainLayout extends AppLayout implements BeforeEnterObserver {
 
@@ -155,7 +154,8 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
                 UI.getCurrent().getSession().close();
             });
         } else {
-            beforeEnterEvent.forwardTo(LoginView.class);
+            VaadinSession.getCurrent().setAttribute("RutaIntentada", beforeEnterEvent.getLocation().getPath());
+            beforeEnterEvent.rerouteTo(LoginView.class);
         }
     }
 

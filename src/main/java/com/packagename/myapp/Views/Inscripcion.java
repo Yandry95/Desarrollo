@@ -22,6 +22,7 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.PWA;
 import org.vaadin.textfieldformatter.CustomStringBlockFormatter;
 
@@ -29,6 +30,7 @@ import java.time.LocalDate;
 import java.time.Period;
 
 @Route(value = "inscripcion", layout = MainLayout.class)
+@RouteAlias(value = "", layout = MainLayout.class)
 @PageTitle("UE JUNAME | INSCRIPCIÓN")
 @PWA(name = "AcademyTics",
         shortName = "AcademyTics",

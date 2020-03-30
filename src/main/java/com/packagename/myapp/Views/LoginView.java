@@ -1,18 +1,15 @@
 package com.packagename.myapp.Views;
 
 import com.packagename.myapp.Controllers.LoginController;
-import com.packagename.myapp.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.charts.model.Navigation;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Viewport;
@@ -22,12 +19,13 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.VaadinSession;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 
 @Route("login")
 @PageTitle("AcademyTic")
 @Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes, viewport-fit=cover")
-public class LoginView extends HorizontalLayout implements AfterNavigationObserver, BeforeEnterObserver{
+public class LoginView extends HorizontalLayout implements BeforeEnterObserver{
     public static String clave_usuario= null;
     public static long contador;
     public static PasswordField clave;
@@ -114,7 +112,8 @@ public class LoginView extends HorizontalLayout implements AfterNavigationObserv
 
     private void ingresar() {
         VaadinSession.getCurrent().setAttribute("LOGIN", "YANDRY");
-        getUI().ifPresent(e-> e.navigate("inscripcion"));
+        Object ruta_intentada = VaadinSession.getCurrent().getAttribute("RutaIntentada");
+        UI.getCurrent().navigate(Optional.ofNullable(ruta_intentada).map(Object::toString).orElse(""));
     }
 
     private void mensajeError(String mensaje) {
@@ -160,13 +159,9 @@ public class LoginView extends HorizontalLayout implements AfterNavigationObserv
     @Override
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
         if (VaadinSession.getCurrent().getAttribute("LOGIN")!=null) {
-            beforeEnterEvent.forwardTo(MainLayout.class);
+            beforeEnterEvent.forwardTo(Inscripcion.class);
         }
     }
 
-    @Override
-    public void afterNavigation(AfterNavigationEvent afterNavigationEvent) {
-
-    }
 
 }
