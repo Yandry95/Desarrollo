@@ -2,13 +2,10 @@ package com.packagename.myapp.Views.Windows;
 
 import com.packagename.myapp.Controllers.PersonasController;
 import com.packagename.myapp.Models.Personas;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
@@ -18,9 +15,6 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
@@ -32,69 +26,15 @@ import org.vaadin.textfieldformatter.CustomStringBlockFormatter;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class Editar_Usuario extends Dialog {
+public class Editar_User extends HorizontalLayout {
 
     public static MemoryBuffer copybuffer = new MemoryBuffer();
 
-    public Editar_Usuario() {
-        setHeight("580px");
-        setWidth("600px");
+    public Editar_User(Personas u) {
 
-        VerticalLayout contenido = new VerticalLayout();
-        contenido.setSpacing(false);
-        contenido.setMargin(false);
-        contenido.setPadding(false);
-        add(contenido);
-
-        Tab tab1 = new Tab("Editar Usuario");
-        tab1.addComponentAsFirst(new Icon(VaadinIcon.USER_CHECK));
-        Tab tab2 = new Tab("Preferencia");
-        tab2.addComponentAsFirst(new Icon(VaadinIcon.COGS));
-
-        Component component1 = buildEditUser();
-        component1.setVisible(true);
-        Component component2 = buildPreferences();
-        component2.setVisible(false);
-
-        Map<Tab, Component> tabsToPages = new HashMap<>();
-        tabsToPages.put(tab1, component1);
-        tabsToPages.put(tab2, component2);
-
-        Tabs tabs = new Tabs(tab1, tab2);
-        tabs.addThemeVariants(TabsVariant.LUMO_ICON_ON_TOP,  TabsVariant.LUMO_CENTERED);
-        tabs.setWidthFull();
-        Div components = new Div(component1,component2);
-
-        Set<Component> pagesShown = Stream.of(component1)
-                .collect(Collectors.toSet());
-
-        tabs.addSelectedChangeListener(event -> {
-            pagesShown.forEach(page -> page.setVisible(false));
-            pagesShown.clear();
-            Component selectedPage = tabsToPages.get(tabs.getSelectedTab());
-            selectedPage.setVisible(true);
-            pagesShown.add(selectedPage);
-        });
-
-        contenido.add(tabs, components);
-        contenido.setAlignItems(FlexComponent.Alignment.STRETCH);
-        contenido.setHeightFull();
-        contenido.expand(components);
-
-    }
-
-    private Component buildEditUser() {
-        Personas u = PersonasController.findById((long)(VaadinSession.getCurrent().getAttribute("ID_PERSONA")));
-
-        HorizontalLayout EditUser = new HorizontalLayout();
-        EditUser.setPadding(false);
-        EditUser.setSizeFull();
+        setPadding(false);
+        setSizeFull();
 
         VerticalLayout profile = new VerticalLayout();
         profile.setWidth("35%");
@@ -104,7 +44,10 @@ public class Editar_Usuario extends Dialog {
 
         Image image = new Image();
         if(u.getImagen()==null)
-            image.setSrc("/img/user.jpg");
+            if(u.getSexo().equals("Masculino"))
+                image.setSrc("/img/user.jpg");
+            else
+                image.setSrc("/img/user2.jpg");
         else {
             StreamResource resource = new StreamResource("Image", () -> {return new ByteArrayInputStream(u.getImagen());});
             image.setSrc(resource);
@@ -199,15 +142,6 @@ public class Editar_Usuario extends Dialog {
         form.add(name, apellido, email, fecha_nacimiento, telefono, direccion, horizontal, guardar);
         form.setAlignItems(FlexComponent.Alignment.STRETCH);
         form.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-        EditUser.add(profile, form);
-        return EditUser;
-    }
-
-    private Component buildPreferences() {
-        HorizontalLayout Preferences = new HorizontalLayout();
-        Preferences.setSizeFull();
-        Preferences.setPadding(false);
-        Preferences.add(new TextField("HOLA"));
-        return Preferences;
+        add(profile, form);
     }
 }

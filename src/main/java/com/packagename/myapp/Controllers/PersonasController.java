@@ -26,7 +26,7 @@ public class PersonasController{
 
     public static void delete (Personas persona){
         JPAService.runInTransaction(em ->{
-            em.remove(persona);
+            em.remove(em.contains(persona) ? persona : em.merge(persona));
             return null;
         });
     }

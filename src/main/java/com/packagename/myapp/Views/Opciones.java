@@ -1,8 +1,12 @@
 package com.packagename.myapp.Views;
 
+import com.packagename.myapp.Controllers.PersonasController;
 import com.packagename.myapp.Models.Personas;
+import com.packagename.myapp.Views.Windows.Delete_User;
+import com.packagename.myapp.Views.Windows.Editar_User;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
@@ -19,7 +23,10 @@ public class Opciones extends HorizontalLayout {
         setWidthFull();
         Image image = new Image();
         if(personas.getImagen()==null)
-            image.setSrc("/img/user.jpg");
+            if(personas.getSexo().equals("Masculino"))
+                image.setSrc("/img/user.jpg");
+            else
+                image.setSrc("/img/user2.jpg");
         else {
             StreamResource resource = new StreamResource("Image", () -> {return new ByteArrayInputStream(personas.getImagen());});
             image.setSrc(resource);
@@ -95,13 +102,20 @@ public class Opciones extends HorizontalLayout {
         modificar.setIcon(new Icon(VaadinIcon.EDIT));
         modificar.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        modificar.addClickListener(e->{});
+        modificar.addClickListener(e->{
+            Dialog dialog = new Dialog();
+            dialog.add(new Editar_User(personas));
+            dialog.open();
+        });
 
         Button eliminar = new Button("Eliminar");
         eliminar.setIcon(new Icon(VaadinIcon.TRASH));
         eliminar.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
-        eliminar.addClickListener(e->{});
+        eliminar.addClickListener(e-> {
+            Delete_User delete = new Delete_User(personas);
+            delete.open();
+        });
 
         botones.add(image, modificar, eliminar);
         botones.setAlignItems(Alignment.STRETCH);

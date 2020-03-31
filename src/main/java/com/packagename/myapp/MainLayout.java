@@ -5,7 +5,7 @@ import com.packagename.myapp.Models.Personas;
 import com.packagename.myapp.Views.Historial_Medico;
 import com.packagename.myapp.Views.Inscripcion;
 import com.packagename.myapp.Views.LoginView;
-import com.packagename.myapp.Views.Windows.Editar_Usuario;
+import com.packagename.myapp.Views.Windows.Profile;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -54,7 +54,10 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
                 image.setSrc(resource);
             }
             else
-                image.setSrc("/img/user.jpg");
+                if(u.getSexo().equals("Masculino"))
+                    image.setSrc("/img/user.jpg");
+                else
+                    image.setSrc("/img/user2.jpg");
         }
         else{
             image.setSrc("/img/user.jpg");
@@ -82,8 +85,6 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
     private void buildDrawer() {
         VerticalLayout pizarra = new VerticalLayout();
 
-        image.addClassName("logo-drawer");
-
         RouterLink inscripcionlink = new RouterLink("Inscripción", Inscripcion.class);
         inscripcionlink.setHighlightCondition(HighlightConditions.sameLocation());
 
@@ -99,14 +100,18 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.addThemeVariants(TabsVariant.LUMO_MINIMAL);
 
-
-        pizarra.add(image,buildUserMenu(), tabs);
+        pizarra.add(buildUserMenu(), tabs);
         pizarra.addClassName("pizarra");
         pizarra.setAlignItems(FlexComponent.Alignment.CENTER);
         addToDrawer(pizarra);
     }
 
     private Component buildUserMenu() {
+        VerticalLayout userAndLogo = new VerticalLayout();
+        userAndLogo.setSpacing(false);
+
+        image.addClassName("logo-drawer");
+
         final MenuBar settings = new MenuBar();
         settings.addThemeVariants(MenuBarVariant.LUMO_SMALL, MenuBarVariant.LUMO_TERTIARY);
         MenuItem usuario = settings.addItem(nombreUsuario);
@@ -117,17 +122,20 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
         salir = usuarioSubMenu.addItem("Cerrar Sesión");
         editar.addClickListener(e-> {
             if (VaadinSession.getCurrent().getAttribute("ID_PERSONA")!=null) {
-                Editar_Usuario dialog = new Editar_Usuario();
+                Profile dialog = new Profile();
                 dialog.open();
             }
         });
         preferencia.addClickListener(e-> {
             if (VaadinSession.getCurrent().getAttribute("ID_PERSONA")!=null){
-                Editar_Usuario dialog = new Editar_Usuario();
+                Profile dialog = new Profile();
                 dialog.open();
             }
         });
-        return settings;
+
+        userAndLogo.add(image, settings);
+        userAndLogo.setAlignItems(FlexComponent.Alignment.CENTER);
+        return userAndLogo;
     }
 
     @Override

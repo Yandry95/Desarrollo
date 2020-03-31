@@ -4,6 +4,10 @@ a[highlight]{
     text-align:center
 }
 
+[part~="header-cell"] {
+  background-color: hsla(214, 57%, 24%, 0.1);
+}
+
 /******** MainLayout *********/
 .header{
     padding: 0 var(--lumo-space-m);

@@ -3,14 +3,12 @@ package com.packagename.myapp.Views;
 import com.packagename.myapp.Controllers.PersonasController;
 import com.packagename.myapp.MainLayout;
 import com.packagename.myapp.Models.Personas;
-import com.packagename.myapp.Views.Windows.Editar_Usuario;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -19,7 +17,6 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -36,21 +33,20 @@ import java.time.Period;
         shortName = "AcademyTics",
         description = "Sistema de Gestión Académico y Administrativo UE JUNAME",
         enableInstallPrompt = true)
-@CssImport("./styles/shared-styles.css")
+@CssImport(value = "./styles/shared-styles.css", themeFor = "vaadin-grid")
 public class Inscripcion extends HorizontalLayout {
     Grid<Personas> grid = new Grid<>(Personas.class);
     public Inscripcion() {
         setSizeFull();
         setPadding(true);
         grid.removeAllColumns();
-        grid.addColumn(e ->(e.getApellido()+" "+e.getNombre())).setHeader("Nombre");
+        grid.addColumn(e ->(e.getApellido()+" "+e.getNombre())).setHeader("NOMBRE");
         grid.addColumn( e ->(
                 Period.between(e.getFecha_nacimiento(),LocalDate.now()).getYears()
-        )).setHeader("Edad");
-        grid.addColumn(Personas::getCorreo).setHeader("Correo");
-        grid.addColumn(Personas::getTelefono).setHeader("Teléfono");
-        grid.addColumn(Personas::getDireccion).setHeader("Dirección");
-        grid.addColumn(Personas::getSexo).setHeader("Sexo");
+        )).setHeader("EDAD");
+        grid.addColumn(Personas::getCorreo).setHeader("CORREO");
+        grid.addColumn(Personas::getTelefono).setHeader("TELÉFONO");
+        grid.addColumn(Personas::getSexo).setHeader("GÉNERO");
         grid.setColumnReorderingAllowed(true);
         grid.getColumns().forEach(col-> {col.setAutoWidth(true); col.setSortable(true);});
         grid.setSizeFull();
